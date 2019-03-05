@@ -51,7 +51,24 @@ parasails.registerPage('available-things', {
     closeDeleteThingModal: function(){
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
+    },
+
+    handleParsingDeleteThingForm: function(){
+      // that we pass to the cloud sdk methods
+      return{
+        id: this.selectedThing.id
+      };
+    },
+
+    submittedDeleteThingForm: function(){
+      console.log('ok it worked!');
+      _.remove(this.things, { id: this.selectedThing.id});
+      this.$forceUpdate();
+
+      this.confirmDeleteThingModalOpen = false;
+      this.selectedThing = undefined;
     }
+
 
   }
 });
