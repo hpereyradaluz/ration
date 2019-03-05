@@ -6,6 +6,7 @@ module.exports = {
 
   description: '',
 
+  files:['photo'],
 
   inputs: {
     photo:{
@@ -25,11 +26,12 @@ module.exports = {
   },
 
 
-  fn: async function (inputs) {
+  fn: async function (inputs, exits) {
 
-    //sails.uploadOne()
+    var info = await sails.uploadOne(inputs.photo);
+    console.log(info);
     // All done.
-    return;
+    return exits.success();
 
   }
 

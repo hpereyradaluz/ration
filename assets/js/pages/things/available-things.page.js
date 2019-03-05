@@ -4,11 +4,23 @@ parasails.registerPage('available-things', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     things: [],
+
+    // The "virtual" portion of the URL which is managed by this page script.
+    virtualPageSlug: '',
+
     confirmDeleteThingModalOpen: false,
     selectedThing: undefined,
 
+    uploadThingModalOpen: false,
+    uploadFormData: {
+      label: ''
+    },
+
     // Syncing / loading state
     syncing: false,
+
+    // Validation errors:
+    formErrors: {},
 
     // Server error state:
     cloudError: ''
@@ -67,8 +79,54 @@ parasails.registerPage('available-things', {
 
       this.confirmDeleteThingModalOpen = false;
       this.selectedThing = undefined;
-    }
+    },
 
+    clickAddButton: function(){
+      console.log('click add');
+      this.uploadThingModalOpen = true;
+    },
+
+    _clearUploadThingModal: function(){
+      // Close modal
+      this.uploadThingModalOpen = false;
+      // Reset form data
+      this.uploadFormData = {
+        label: ''
+      };
+      // Clear error states
+      this.formErrors = {};
+      this.cloudError = '';
+    },
+
+    closeUploadThingModal: function(){
+      this._clearUploadThingModal();
+    },
+
+    handleParsingUploadThingForm: function(){
+      // Clear out any pre-existing error messages.
+      this.formErrors = {};
+
+      var argins = this.uploadFormData;
+
+      // TODO: validations go here
+
+      // if there where any issues, they´ve already now been communicated to the user,
+      // so simply return undefined. (This signifies that the submission should be
+      // cancelled.)
+      if (Object.keys(this.formErrors).length > 0){
+        return;
+      }
+
+      return argins;
+    },
+
+    submittedUploadThingForm: function(result){
+
+      // TODO
+
+      // Close the modal.
+      this._clearUploadThingModal();
+    },
 
   }
 });
