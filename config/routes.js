@@ -15,6 +15,9 @@ module.exports.routes = {
   //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
   'GET /':                   { action: 'view-homepage-or-redirect' },
   'GET /welcome/:unused?':   { action: 'dashboard/view-welcome' },
+//  'GET /things':             { action: 'things/view-available-things' },
+  'GET /things/:virtualPageSlug?':     { action: 'things/view-available-things' },
+
 
   'GET /faq':                { view:   'pages/faq' },
   'GET /legal/terms':        { view:   'pages/legal/terms' },
@@ -32,10 +35,6 @@ module.exports.routes = {
   'GET /account':            { action: 'account/view-account-overview' },
   'GET /account/password':   { action: 'account/view-edit-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
-
-  'GET /things':             { action: 'things/view-available-things' },
-
-  'GET /things/:virtualPageSlug?':     { action: 'things/view-available-things' },
 
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
@@ -66,7 +65,9 @@ module.exports.routes = {
   'POST  /api/v1/entrance/send-password-recovery-email': { action: 'entrance/send-password-recovery-email' },
   'POST  /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
   'POST  /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
+
   'DELETE  /api/v1/things/destroy-one-thing':            { action: 'things/destroy-one-thing' },
+  'GET  /api/v1/things/:id':                             { action: 'things/download-photo' },
   'PUT  /api/v1/things/upload-thing':                    { action: 'things/upload-thing' },
 
 };

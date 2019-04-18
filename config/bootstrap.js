@@ -15,7 +15,7 @@ module.exports.bootstrap = async function() {
   var path = require('path');
 
   // This bootstrap version indicates what version of fake data we're dealing with here.
-  var HARD_CODED_DATA_VERSION = 6;
+  var HARD_CODED_DATA_VERSION = 9;
 
   // This path indicates where to store/look for the JSON file that tracks the "last run bootstrap info"
   // locally on this development computer (if we happen to be on a development computer).
@@ -79,12 +79,13 @@ module.exports.bootstrap = async function() {
   //Probably not real life
   //await User.addToCollection(ryanDahl.id, 'friends', mikeMcNeil.id);
 
+  //FUTURE: Decide what to do with all this
   // Create some things
-  await Thing.createEach([
-    { label: 'Lawn Mower that matches the grass', owner: mikeMcNeil.id },
-    { label: 'Rad mountain bike', owner: ryanDahl.id },
-    { label: 'This Kenny G album', owner: ryanDahl.id },
-  ]).fetch();
+  // await Thing.createEach([
+  //   { label: 'Lawn Mower that matches the grass', owner: mikeMcNeil.id },
+  //   { label: 'Rad mountain bike', owner: ryanDahl.id },
+  //   { label: 'This Kenny G album', owner: ryanDahl.id },
+  // ]).fetch();
 
   // Save new bootstrap version
   await sails.helpers.fs.writeJson.with({

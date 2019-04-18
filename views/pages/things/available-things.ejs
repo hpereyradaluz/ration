@@ -1,6 +1,6 @@
 <div id="available-things" v-cloak>
 
-  <div class="container">
+  <!-- <div class="container">
     <div class="page-header text-center">
       <h1>Things</h1>
       <h2>View available items to borrow, or upload your own things.</h2>
@@ -20,9 +20,51 @@
     </div>
     <div class="empty text-center" v-else><p>You and your friends have not uploaded any items.<a href="/things/new" @click="clickAddButton()">Add something</a> to get started!</p></div>
   </div>
+ -->
+  <div class="container">
+    <div class="page-header text-center">
+      <h1>Things</h1>
+      <h2>View available items to borrow, or upload your own things.</h2>
+      <div class="header-buttons">
+        <button class="btn btn-outline-primary" @click="clickAddButton()">Add an item</button>
+      </div>
+    </div>
+    <div class="listings" v-if="things.length > 0">
+      <div class="card" :key="'thing'+thing.id" :class="[thing.owner.id === me.id ? 'mine' : '', thing.unavailable ? 'not-available' : '']" v-for="thing in things">
+        <div class="card-options dropdown" v-if="thing.borrowedBy && thing.owner.id === me.id">
+          <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-ellipsis-v"></span></span>
+          <div class="dropdown-menu dropdown-menu-right">
+            <span class="dropdown-item" @click="clickDeleteThing(thing.id)">Delete</span>
+            <span class="dropdown-item" @click="clickMarkReturned(thing.id)">Mark as returned</span>
+            <span class="dropdown-item" @click="clickContactBorrower(thing.id)">Contact {{thing.borrowedBy.fullName}}</span>
+          </div>
+        </div>
+        <div class="card-options dropdown" v-else-if="thing.borrowedBy && thing.borrowedBy.id === me.id">
+          <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-ellipsis-v"></span></span>
+          <div class="dropdown-menu dropdown-menu-right">
+            <span class="dropdown-item" @click="clickReturn(thing.id)">Give this back</span>
+            <span class="dropdown-item" @click="clickContactOwner(thing.id)">Contact {{thing.owner.fullName}}</span>
+          </div>
+        </div>
+        <div class="card-options" v-else-if="!thing.borrowedBy">
+          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Delete" @click="clickDeleteThing(thing.id)" v-if="thing.owner.id === me.id"><span class="fa fa-trash-o text-danger"></span></span>
+          <span class="options-button borrow" data-toggle="tooltip" data-placement="top" title="Borrow" @click="clickBorrow(thing.id)" v-else><span class="fa fa-handshake-o text-dark"></span></span>
+        </div>
+        <img alt="A mysterious item" :alt="thing.label ? thing.label : 'A mysterious item'" :src="thing.imageSrc"/>
+        <!-- <img alt="A mysterious item" :alt="thing.label ? thing.label : 'A mysterious item'" :src="thing.imageSrc"/> -->
+        <span class="label" v-if="thing.label">{{thing.label}}<br/></span>
+        <small class="owner text-secondary" v-if="thing.owner.id === me.id"><span class="fa fa-home mr-1"></span> Mine</small>
+        <small class="owner text-success" v-else-if="thing.borrowedBy && thing.borrowedBy.id === me.id"><span class="fa fa-star-o mr-1"></span> Borrowing</small>
+        <small class="owner text-primary" v-else>{{thing.owner.fullName}}</small>
+      </div>
+    </div>
+    <div class="empty text-center" v-else><p>You and your friends have not uploaded any items. <a href="/things/new" @click="clickAddButton()">Add something</a> to get started!</p></div>
+  </div>
+
 
   <% /* "Upload thing" modal */ %>
-  <modal v-if="virtualPageSlug === 'new'" v-cloak key="new" @close="closeUploadThingModal()">
+  <!-- <modal v-if="virtualPageSlug === 'new'" v-cloak key="new" @close="closeUploadThingModal()"> -->
+    <modal v-if="uploadThingModalOpen" v-cloak key="new" @close="closeUploadThingModal()">
     <div class="modal-header">
       <h5 class="modal-title">Upload a new thing</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -54,9 +96,9 @@
           </div>
         </div>
         <div class="form-group" v-if="uploadFormData.previewImageSrc">
+        </div>
           <label>What is it?</label>
           <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Waffle Iron">
-        </div>
         <p class="text-danger" v-if="cloudError === 'tooBig'"><small>That file is too big. Please choose a junkier picture.</small></p>
         <p class="text-danger" v-else-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
       </div>

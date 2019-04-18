@@ -7,13 +7,12 @@ parasails.registerPage('available-things', {
 
     // The "virtual" portion of the URL which is managed by this page script.
     virtualPageSlug: '',
-
     confirmDeleteThingModalOpen: false,
     selectedThing: undefined,
-
     uploadThingModalOpen: false,
     uploadFormData: {
-      label: ''
+      label: '',
+      photo: undefined
     },
 
     // Syncing / loading state
@@ -25,6 +24,8 @@ parasails.registerPage('available-things', {
     // Server error state:
     cloudError: ''
   },
+
+  //virtualPages: true,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -91,7 +92,8 @@ parasails.registerPage('available-things', {
       this.uploadThingModalOpen = false;
       // Reset form data
       this.uploadFormData = {
-        label: ''
+        label: '',
+        photo: undefined
       };
       // Clear error states
       this.formErrors = {};
@@ -99,7 +101,7 @@ parasails.registerPage('available-things', {
     },
 
     closeUploadThingModal: function(){
-      this._clearUploadThingModal();
+      this._clearUploadThingModal();  // we use underscore "_" because is a private method
     },
 
     handleParsingUploadThingForm: function(){
@@ -120,12 +122,58 @@ parasails.registerPage('available-things', {
       return argins;
     },
 
-    submittedUploadThingForm: function(result){
+    submittedUploadThingForm: function(result) {
+      // var newItem = _.extend(result, {
+      //   label: this.uploadFormData.label,
+      //   isBorrowed: false,
+      //   owner: {
+      //     id: this.me.id,
+      //     fullName : this.me.fullName
+      //   }
+      // });
 
-      // TODO
+      // // // Add the new thing to the list
+      // this.things.unshift(newItem);
+
+      this.things.push({
+        label: this.uploadFormData.label,
+        id: result.id,
+        owner: {
+          id: this.me
+        }
+      });
 
       // Close the modal.
       this._clearUploadThingModal();
+    },
+
+    changeFileInput: function(files) {
+      if (files.length !== 1 && !this.uploadFormData.photo) {
+        throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
+      }
+      var selectedFile = files[0];
+
+      // If you cancel from the native upload window when you already
+      // have a photo tracked, then we just avast (return early).
+      // In this case, we just leave whatever you had there before.
+      if (!selectedFile && this.uploadFormData.photo) {
+        return;
+      }
+
+      this.uploadFormData.photo = selectedFile;
+
+      // Set up the file preview for the UI:
+      var reader = new FileReader();
+      reader.onload = (event)=>{
+        this.uploadFormData.previewImageSrc = event.target.result;
+
+        // Unbind this "onload" event.
+        delete reader.onload;
+      };
+      // Clear out any error messages about not providing an image.
+      this.formErrors.photo = false;
+      reader.readAsDataURL(selectedFile);
+
     },
 
   }
