@@ -11,7 +11,18 @@ module.exports = {
 
     friends:{
       description: 'An array of new friends to send requests to.',
-      type: ['string'],
+      type: [
+        {
+          emailAddress: 'string',
+          fullName: 'string',
+        }
+      ],
+      example: [
+        {
+          emailAddress: 'foo@example.com',
+          fullName: 'Foo McF'
+        }
+      ],
       required: true,
     }
 
@@ -25,14 +36,31 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    var desiredFriendEmails = _.pluck(inputs.friends, 'emailAddress');
+
     var friends = await User.find({
-      emailAddress: { in: inputs.friends }
+      emailAddress: { in: _.pluck(inputs.friends, 'emailAddress') }
     });
     // TODO: deal with friends not yet in the database
 
-    var friendIds = _.pluck(friends, 'id');
+    var existingUserFriendIds = _.pluck(friends, 'id');
 
-    await User.addToCollection(this.req.me.id, 'outboundFriendRequests', friendIds);
+    var existingsUserEmails = _.pluck(friends, 'emailAddress');
+
+    var newUserEmails = _.difference(desiredFriendEmails, existingsUserEmails);
+
+    if (newUserEmails.length === 0) {
+      await User.addToCollection(this.req.me.id, 'outboundFriendRequests', existingUserFriendIds);
+    } else {
+      for (let email of newUserEmails) {
+        User.create({
+          emailAddress: email,
+          fullName: (_.find(inputs.friends, { emailAddress: email })).fullName
+        });
+      }
+      // TODO: send emails to newly invited users
+      await User.addToCollection(this.req.me.id, 'outboundFriendRequests', existingUserFriendIds);
+    }
 
     return exits.success();
 
