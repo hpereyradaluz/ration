@@ -57,6 +57,7 @@ module.exports = {
     var stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
       stripeCustomerId: this.req.me.stripeCustomerId,
       token: inputs.stripeToken || '',
+      // descomentar la siguiente linea para agregar automaticamente el usuario a ese plan por ejemplo
       //plan: 'enterprise'
     }).timeout(5000).retry();
 

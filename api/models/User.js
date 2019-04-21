@@ -167,8 +167,8 @@ without necessarily having a billing card.`
     //pluar(collection) association, we call flexible association because the thing that are associated
     //is the same type of you are (in this case friends are user, the same type)
     friends: { collection: 'User' },
-    inboundFriendRequest: {collection: 'User', via: 'outboundFriendRequest' },
-    outboundFriendRequest: {collection: 'User', via: 'inboundFriendRequest' },
+    inboundFriendRequests: {collection: 'User', via: 'outboundFriendRequests' },
+    outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests' },
 
   },
 
