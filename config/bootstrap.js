@@ -15,7 +15,7 @@ module.exports.bootstrap = async function() {
   var path = require('path');
 
   // This bootstrap version indicates what version of fake data we're dealing with here.
-  var HARD_CODED_DATA_VERSION = 9;
+  var HARD_CODED_DATA_VERSION = 10;
 
   // This path indicates where to store/look for the JSON file that tracks the "last run bootstrap info"
   // locally on this development computer (if we happen to be on a development computer).
@@ -74,7 +74,9 @@ module.exports.bootstrap = async function() {
   }).fetch();
 
   // Add Ryan Dahl as one of Mike´s friends
+  // AND add Mike as one of the Ryan Dahl´s friends
   await User.addToCollection(mikeMcNeil.id, 'friends', ryanDahl.id);
+  await User.addToCollection(ryanDahl.id, 'friends', mikeMcNeil.id);
 
   //Probably not real life
   //await User.addToCollection(ryanDahl.id, 'friends', mikeMcNeil.id);

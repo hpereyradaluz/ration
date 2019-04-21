@@ -57,6 +57,7 @@ module.exports = {
     var stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
       stripeCustomerId: this.req.me.stripeCustomerId,
       token: inputs.stripeToken || '',
+      //plan: 'enterprise'
     }).timeout(5000).retry();
 
     // Update (or clear) the card info we have stored for this user in our database.

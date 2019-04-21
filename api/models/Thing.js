@@ -32,7 +32,7 @@ module.exports = {
 
     expectedReturnAt: {
       type: 'number',
-      description: 'A JS timestamp representing the moment of this item\'s expected return.'
+      description: 'A JS timestamp representing the moment of this item\'s expected return.',
       example: 15023892893
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
