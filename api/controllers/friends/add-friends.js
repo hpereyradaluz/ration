@@ -41,7 +41,6 @@ module.exports = {
     var friends = await User.find({
       emailAddress: { in: _.pluck(inputs.friends, 'emailAddress') }
     });
-    // TODO: deal with friends not yet in the database
 
     var existingUserFriendIds = _.pluck(friends, 'id');
 
@@ -49,18 +48,23 @@ module.exports = {
 
     var newUserEmails = _.difference(desiredFriendEmails, existingsUserEmails);
 
-    if (newUserEmails.length === 0) {
-      await User.addToCollection(this.req.me.id, 'outboundFriendRequests', existingUserFriendIds);
-    } else {
-      for (let email of newUserEmails) {
-        User.create({
-          emailAddress: email,
-          fullName: (_.find(inputs.friends, { emailAddress: email })).fullName
-        });
-      }
+    for (let email of newUserEmails) {
+
+      var token = await sails.helpers.strings.random('url-friendly');
+
+      await User.create({
+        emailAddress: email,
+        fullName: (_.find(inputs.friends, { emailAddress: email })).fullName,
+        emailProofToken: token,
+        emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
+        emailStatus: 'confirmed'
+      });
+
       // TODO: send emails to newly invited users
-      await User.addToCollection(this.req.me.id, 'outboundFriendRequests', existingUserFriendIds);
-    }
+    }//∞
+
+    await User.addToCollection(this.req.me.id, 'outboundFriendRequests', existingUserFriendIds);
+
 
     return exits.success();
 
