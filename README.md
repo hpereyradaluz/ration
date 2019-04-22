@@ -13,8 +13,7 @@
 # for dns understanding and more check platzi dev-ops carreer
 # en cloudflare crytp tab ahi configuras ssl https requests etc
 
-# Using a platform as a service
-heroku
+# Using a platform as a serviceheroku
 # ration-sailsjs-course
 # ration-sailsjs-course
 # ration-sailsjs-course
