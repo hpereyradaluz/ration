@@ -149,7 +149,7 @@ module.exports = {
     ***************************************************************************/
     cors: {
       // allowOrigins: [
-      //   'https://rationstaging.herokuapp.com',
+        'https://rationstaging.herokuapp.com',
       // ]
     },
 
