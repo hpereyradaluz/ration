@@ -58,6 +58,7 @@ module.exports.bootstrap = async function() {
     await sails.models[identity].destroy({});
   }//∞
 
+/*
   // By convention, this is a good place to set up fake data during development.
   var ryanDahl = await User.create({
     emailAddress: 'admin@example.com',
@@ -88,7 +89,7 @@ module.exports.bootstrap = async function() {
   //   { label: 'Rad mountain bike', owner: ryanDahl.id },
   //   { label: 'This Kenny G album', owner: ryanDahl.id },
   // ]).fetch();
-
+*/
   // Save new bootstrap version
   await sails.helpers.fs.writeJson.with({
     destination: bootstrapLastRunInfoPath,

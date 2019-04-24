@@ -149,7 +149,7 @@ module.exports = {
     ***************************************************************************/
     cors: {
       // allowOrigins: [
-      //   'https://example.com',
+      //   'https://rationstaging.herokuapp.com',
       // ]
     },
 
@@ -371,7 +371,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://example.com',
+    baseUrl: 'example.com',
     internalEmailAddress: 'support@example.com',
 
     // mailgunDomain: 'mg.example.com',
