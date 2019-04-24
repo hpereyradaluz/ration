@@ -148,9 +148,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cors: {
-      // allowOrigins: [
+       allowOrigins: [
         'https://rationstaging.herokuapp.com',
-      // ]
+       ]
     },
 
   },
